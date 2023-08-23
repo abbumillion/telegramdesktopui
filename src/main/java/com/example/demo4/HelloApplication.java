@@ -3,7 +3,6 @@ package com.example.demo4;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,12 +12,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -33,22 +35,17 @@ public class HelloApplication extends Application {
         telegramDesktopUI.prefWidthProperty().bind(scene.widthProperty());
         telegramDesktopUI.prefHeightProperty().bind(scene.heightProperty());
     }
-
-    public static void main(String[] args) {
-        launch();
-    }
 }
 
-class TelegramDesktopUI extends HBox
-{
-    Button menuButton,sendFileButton,imojiButton,micButton , callButton,searchButton ,userInfoButton,threeDotButton;
-    TextField searchTextField , writeMessageTextField;
-    HBox hBox1,hBox2;
-    VBox vBox1 , vBox2;
-    ListView listView1 , listView2;
+class TelegramDesktopUI extends HBox {
+    Button menuButton, sendFileButton, imojiButton, micButton, callButton, searchButton, userInfoButton, threeDotButton;
+    TextField searchTextField, writeMessageTextField;
+    HBox hBox1, hBox2;
+    VBox vBox1, vBox2;
+    ListView listView1, listView2;
     Label userNameLabel;
-    public TelegramDesktopUI()
-    {
+
+    public TelegramDesktopUI() {
         //
         listView1 = new ListView<>();
         listView2 = new ListView<>();
@@ -70,11 +67,11 @@ class TelegramDesktopUI extends HBox
         userInfoButton = new Button("usinfo");
         threeDotButton = new Button(":");
         // adding controls to the root
-        hBox1.getChildren().addAll(menuButton,searchTextField);
-        vBox1.getChildren().addAll(hBox1 ,listView1);
-        hBox2.getChildren().addAll(sendFileButton,writeMessageTextField,imojiButton,micButton);
-        vBox2.getChildren().addAll(listView2 , hBox2);
-        getChildren().addAll(vBox1,vBox2);
+        hBox1.getChildren().addAll(menuButton, searchTextField);
+        vBox1.getChildren().addAll(hBox1, listView1);
+        hBox2.getChildren().addAll(sendFileButton, writeMessageTextField, imojiButton, micButton);
+        vBox2.getChildren().addAll(listView2, hBox2);
+        getChildren().addAll(vBox1, vBox2);
         //
         searchTextField.prefWidthProperty().bind(hBox1.widthProperty().multiply(.87));
         writeMessageTextField.prefWidthProperty().bind(hBox2.widthProperty().multiply(.8));
@@ -123,24 +120,23 @@ class TelegramDesktopUI extends HBox
         imojiIcon.setFitWidth(28);
         imojiIcon.setFitHeight(22);
         //
-        for (int i =0 ; i < 100 ; i++)
-        {
-            listView1.getItems().addAll(new User("User",new Image(new File("src/main/resources/images/user-icon.png").toURI().toASCIIString())));
+        for (int i = 0; i < 100; i++) {
+            listView1.getItems().addAll(new User("User", new Image(new File("src/main/resources/images/user-icon.png").toURI().toASCIIString())));
 
-            listView2.getItems().addAll(new Message(Math.random() + "","this is a telegram message"));
+            listView2.getItems().addAll(new Message(Math.random() + "", "this is a telegram message"));
         }
         listView1.setCellFactory(user -> new UserListCell());
         listView2.setCellFactory(message -> new MessageListCell());
     }
 
 }
+
 // create message class
-class Message{
+class Message {
     String timestamp;
     String message;
 
-    public Message(String timestamp , String message)
-    {
+    public Message(String timestamp, String message) {
         this.message = message;
         this.timestamp = timestamp;
     }
@@ -153,15 +149,14 @@ class Message{
         return timestamp;
     }
 }
+
 // create user class
-class User
-{
+class User {
     private String name;
     private Image userImage;
 
 
-    public User(String name , Image userImage)
-    {
+    public User(String name, Image userImage) {
         this.name = name;
         this.userImage = userImage;
     }
@@ -176,7 +171,7 @@ class User
 }
 
 // user repo class
-class UserRepo{
+class UserRepo {
     static ObservableList userList = FXCollections.observableArrayList();
 
     public static ObservableList getUserList() {
@@ -185,15 +180,16 @@ class UserRepo{
 }
 
 // message repo
-class MessageRepo{
+class MessageRepo {
     static ObservableList messageList = FXCollections.observableArrayList();
 
     public static ObservableList getMessageList() {
         return messageList;
     }
 }
+
 // user list cell
-class UserListCell extends ListCell<User>{
+class UserListCell extends ListCell<User> {
     @Override
     protected void updateItem(User user, boolean b) {
         HBox hBox = new HBox(15);
@@ -201,20 +197,19 @@ class UserListCell extends ListCell<User>{
         ImageView imageView = new ImageView(new File("src/main/resources/images/logo.png").toURI().toASCIIString());
 
         super.updateItem(user, b);
-        if (user != null)
-        {
+        if (user != null) {
             messageLabel.setText(user.getName());
             imageView = new ImageView(user.getUserImage());
         }
         imageView.setFitWidth(32);
         imageView.setFitHeight(24);
         //
-        hBox.getChildren().addAll(imageView,messageLabel);
+        hBox.getChildren().addAll(imageView, messageLabel);
         setGraphic(hBox);
     }
 }
-class MessageListCell extends ListCell<Message>
-{
+
+class MessageListCell extends ListCell<Message> {
 
     @Override
     protected void updateItem(Message message, boolean b) {
@@ -224,13 +219,12 @@ class MessageListCell extends ListCell<Message>
         Label timestampLabel = new Label();
 
         super.updateItem(message, b);
-        if (message != null)
-        {
+        if (message != null) {
             messageLabel.setText(message.getMessage());
             timestampLabel.setText(message.getTimestamp());
         }
         //
-        hBox.getChildren().addAll(timestampLabel,messageLabel);
+        hBox.getChildren().addAll(timestampLabel, messageLabel);
         setGraphic(hBox);
         //
     }
